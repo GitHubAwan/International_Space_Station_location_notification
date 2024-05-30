@@ -26,6 +26,8 @@ end_time = astronomical_twilight_begin
 def check_lat_long():
     issfetch=IssFetcher()
     latitude, lngitude=issfetch.fetch_iss()
+    latitude=float(latitude)
+    lngitude=float(lngitude)
     # Your position is within +5 or -5 degrees of the iss position.
     if MY_LAT - 5 <= latitude <= MY_LAT + 5 and MY_LONG - 5 <= lngitude <= MY_LONG + 5:
         return True
@@ -52,7 +54,7 @@ def is_within_time_range(start_time_str, end_time_str):
 
 
 
-if is_within_time_range(start_time, end_time) and check_lat_long :
+if is_within_time_range(start_time, end_time) and check_lat_long() :
     print("当前ISS正在你的上空，并且天空足够暗，执行程序。")
     # 在这里放置需要运行的程序代码
 

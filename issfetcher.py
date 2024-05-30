@@ -13,6 +13,4 @@ class IssFetcher:
         # iss_position=(latitude, longitude)
         return latitude,longitude
 
-# fetcher = IssFetcher()
-# a = fetcher.fetch_iss()
-# print(f"International Space Station location notification,lat,long:{a}")
+
