@@ -27,7 +27,7 @@ def check_lat_long():
     issfetch=IssFetcher()
     latitude, lngitude=issfetch.fetch_iss()
     # Your position is within +5 or -5 degrees of the iss position.
-    if MY_LAT - 55 <= latitude <= MY_LAT + 55 and MY_LONG - 55 <= lngitude <= MY_LONG + 55:
+    if MY_LAT - 5 <= latitude <= MY_LAT + 5 and MY_LONG - 5 <= lngitude <= MY_LONG + 5:
         return True
     else:
         return False
