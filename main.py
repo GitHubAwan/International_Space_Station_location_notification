@@ -1,27 +1,27 @@
 from sunset import SunTimesFetcher
 from issfetcher import IssFetcher
 from datetime import datetime, time
+import smtplib
+from email.mime.text import MIMEText
 
-# lat=34.125263
-# lng=241.958027
+from my_config import EMAIL_CONFIG
 
-MY_LAT=lat=-37.125263
-MY_LONG=lng=-79.958027
-#can_lat = 30-40
-#can_lng = 235-247
+MY_LAT=34.125263
+MY_LONG=241.958027
+
+# MY_LAT=lat=-37.125263
+# MY_LONG=lng=-79.958027
+
+my_email = EMAIL_CONFIG['my_email']
+password = EMAIL_CONFIG['password']
+to_email = EMAIL_CONFIG['to_email']
+
+
 
 fetcher = SunTimesFetcher()
 astronomical_twilight_begin, astronomical_twilight_end = fetcher.fetch_sun_times()
-
-print("Astronomical Twilight Begin:", astronomical_twilight_begin)
-print("Astronomical Twilight End:", astronomical_twilight_end)
 start_time = astronomical_twilight_end
 end_time = astronomical_twilight_begin
-# 示例时间段
-# start_time="21:11"
-# end_time="05:39"
-
-
 
 def check_lat_long():
     issfetch=IssFetcher()
@@ -31,9 +31,6 @@ def check_lat_long():
         return True
     else:
         return False
-
-
-
 
 
 
@@ -58,6 +55,19 @@ def is_within_time_range(start_time_str, end_time_str):
 if is_within_time_range(start_time, end_time) and check_lat_long :
     print("当前ISS正在你的上空，并且天空足够暗，执行程序。")
     # 在这里放置需要运行的程序代码
+
+    # 创建邮件消息对象，并指定字符集编码为 UTF-8
+    msg=MIMEText("当前ISS正在你的上空，并且天空足够暗，请抬头观看。", _charset="utf-8")
+    msg['Subject']="当前ISS正在你的上空"
+    msg['From']=my_email
+    msg['To']=to_email
+
+    # 连接 SMTP 服务器并发送邮件
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=my_email, password=password)
+        connection.send_message(msg)
+
 else:
     print("当前ISS不在你的上空，跳过。")
     # 在这里放置跳过的逻辑
